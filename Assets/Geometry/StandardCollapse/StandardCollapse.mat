@@ -20,18 +20,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 10a1d1fe66449464c8d2b6630bd3eb29, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AlphaFactor: 1
-    - _Destruction: 0
+    - _AlphaFactor: 0.189
+    - _Destruction: 0.899
     - _EndDistance: 0.3
-    - _InvFade: 1
+    - _InvFade: 0.56
     - _Method: 0
-    - _PositionFactor: 0.2
-    - _RotationFactor: 1
-    - _ScaleFactor: 1
+    - _PositionFactor: 0.173
+    - _RotationFactor: 0.868
+    - _ScaleFactor: 0.422
     - _StartDistance: 0.6
     m_Colors:
-    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _DestructorPos: {r: 0, g: 0, b: 0, a: 0}
+    - _TintColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.5019608}
