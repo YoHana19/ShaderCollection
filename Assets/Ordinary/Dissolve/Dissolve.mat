@@ -24,11 +24,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 46c9b2c471a59f24cbe88eae93a32f60, type: 3}
+        m_Texture: {fileID: 2800000, guid: baf22028922936f4eaf60d57c0a25542, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Glossiness: 0.5
+    - _Glossiness: 0.294
     - _Metallic: 0
     - _Threshold: 0
     m_Colors:

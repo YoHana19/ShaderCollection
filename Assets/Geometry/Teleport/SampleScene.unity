@@ -492,7 +492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 880a8bac53dd05c4b8a84c311a0b0da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isExecuteByScript: 1
+  isExecuteByScript: 0
   emitter: {fileID: 871098239}
   receiver: {fileID: 1777530631}
 --- !u!1 &871098238
