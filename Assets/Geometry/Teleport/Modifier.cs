@@ -12,9 +12,9 @@ namespace GTeleporter
     {
         #region Editable attributes
 
-        [SerializeField] float _offset;
-        [SerializeField] Transform _vanishingPoint;
-        [SerializeField] Renderer[] _linkedRenderers;
+        public float _offset;
+        [SerializeField] private Transform _vanishingPoint;
+        [SerializeField] private Renderer[] _linkedRenderers;
 
         #endregion
 
