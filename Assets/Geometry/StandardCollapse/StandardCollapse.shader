@@ -24,9 +24,9 @@ Shader "Geometory/StandardCollapse"
 
 	CGINCLUDE
 
-#include "UnityCG.cginc"
+	#include "UnityCG.cginc"
 
-#define PI 3.1415926535
+	#define PI 3.1415926535
 
 	sampler2D _MainTex;
 	fixed4 _MainTex_ST;
