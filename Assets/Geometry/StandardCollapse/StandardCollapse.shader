@@ -3,7 +3,7 @@
 // The original file name is "DestructionAdditiveGS.shader"
 //== ==//
 
-Shader "Geometory/StandardCollapse"
+Shader "Geometry/StandardCollapse"
 {
 	Properties
 	{

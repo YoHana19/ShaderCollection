@@ -2,7 +2,7 @@
 //This is originated from https://sleepygamersmemo.blogspot.com/2019/02/diffuse-wireframe-with-geometry-shader.html
 //== ==//
 
-Shader "Geometory/Diffuse/Wireframe_Thickness"
+Shader "Geometry/Diffuse/Wireframe_Thickness"
 {
 	Properties
 	{
@@ -98,8 +98,8 @@ Shader "Geometory/Diffuse/Wireframe_Thickness"
 			[maxvertexcount(54)]
 			void geo(triangle vertex_input IN[3], inout TriangleStream<vertex_output> triStream)
 			{
-#define ADDV(v) triStream.Append(SetVertex(v))
-#define ADDTRI(v1, v2, v3) ADDV(v1); ADDV(v2); ADDV(v3); triStream.RestartStrip()
+				#define ADDV(v) triStream.Append(SetVertex(v))
+				#define ADDTRI(v1, v2, v3) ADDV(v1); ADDV(v2); ADDV(v3); triStream.RestartStrip()
 
 				float width = lerp(0, 2.0 / 3.0, _Width);
 				float thickness = width * _Thickness;
@@ -296,20 +296,20 @@ Shader "Geometory/Diffuse/Wireframe_Thickness"
 	  fixed4 _Color;
 	  fixed4 _LightColor0;
 
-	  fixed4 frag(vertex_output i) : COLOR
-	  {
-	   i.lightDir = normalize(i.lightDir);
-	   fixed atten = LIGHT_ATTENUATION(i);
-	   fixed4 col = _Color;
-	   fixed3 normal = i.normal;
-	   fixed diff = saturate(dot(normal, i.lightDir));
+		fixed4 frag(vertex_output i) : COLOR
+		{
+			i.lightDir = normalize(i.lightDir);
+			fixed atten = LIGHT_ATTENUATION(i);
+			fixed4 col = _Color;
+			fixed3 normal = i.normal;
+			fixed diff = saturate(dot(normal, i.lightDir));
 
-	   fixed4 c;
-	   c.rgb = (col.rgb * _LightColor0.rgb * diff) * (atten * 2);
-	   c.a = col.a;
+			fixed4 c;
+			c.rgb = (col.rgb * _LightColor0.rgb * diff) * (atten * 2);
+			c.a = col.a;
 
-	   return c;
-	  }
+			return c;
+		}
 
 	  ENDCG
 	 }

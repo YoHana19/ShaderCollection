@@ -2,7 +2,7 @@
 //This is originated from https://sleepygamersmemo.blogspot.com/2019/02/unlit-wireframe-with-geometry-shader.html
 //== ==//
 
-Shader "Geometory/Unlit/Wireframe"
+Shader "Geometry/Unlit/Wireframe"
 {
 	Properties
 	{
