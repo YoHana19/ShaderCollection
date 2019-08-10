@@ -1,5 +1,24 @@
-﻿// Put this in a folder called "Shared" in the same location as all your shader files.
-// Or, put it wherever you want and change the filepath on line 18 of Rainbow.shader.
+﻿// Hash function from H. Schechter & R. Bridson, goo.gl/RXiKaH
+uint Hash(uint s)
+{
+	s ^= 2747636419u;
+	s *= 2654435769u;
+	s ^= s >> 16;
+	s *= 2654435769u;
+	s ^= s >> 16;
+	s *= 2654435769u;
+	return s;
+}
+
+float Random(uint seed)
+{
+	return float(Hash(seed)) / 4294967295.0; // 2^32-1
+}
+
+float Random2(float2 uv)
+{
+	return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453123);
+}
 
 inline fixed4 RGBtoHSL(fixed4 rgb) {
 	fixed4 hsl = fixed4(0.0, 0.0, 0.0, rgb.w);

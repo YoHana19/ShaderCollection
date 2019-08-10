@@ -58,16 +58,9 @@
 				float3 normal;
 			};
 
-			g2f SetVertex(vData data)
+			void ForwardBaseLightingInGeom(inout g2f o)
 			{
-				g2f o;
-				o.vertex.xyz = data.pos;
-				o.vertex = UnityObjectToClipPos(o.vertex);
-				o.uv = data.uv;
-				o.normal = data.normal;
 				o.lightDir = ObjSpaceLightDir(o.vertex);
-				UNITY_TRANSFER_FOG(o, o.vertex);
-
 				TRANSFER_VERTEX_TO_FRAGMENT(o);
 
 				o.vertexLighting = float3(0.0, 0.0, 0.0);
@@ -88,8 +81,35 @@
 					o.vertexLighting = o.vertexLighting + diffuseReflection * 2;
 				}
 
-				#endif
+			#endif
+			}
 
+			fixed4 ForwardBaseLightingInFrag(g2f i, fixed4 color)
+			{
+				fixed4 col = color;
+				i.lightDir = normalize(i.lightDir);
+				fixed atten = LIGHT_ATTENUATION(i);
+
+				col += fixed4(i.vertexLighting, 1.0);
+				fixed diff = saturate(dot(i.normal, i.lightDir));
+
+				fixed4 c;
+				c.rgb = UNITY_LIGHTMODEL_AMBIENT.rgb * 2 * col.rgb;
+				c.rgb += (col.rgb * _LightColor0.rgb * diff) * (atten * 2);
+				c.a = col.a + _LightColor0.a * atten;
+
+				return c;
+			}
+
+			g2f SetVertex(vData data)
+			{
+				g2f o;
+				o.vertex.xyz = data.pos;
+				o.vertex = UnityObjectToClipPos(o.vertex);
+				o.uv = data.uv;
+				o.normal = data.normal;
+				UNITY_TRANSFER_FOG(o, o.vertex);
+				ForwardBaseLightingInGeom(o);
 				return o;
 			}
 
@@ -102,16 +122,8 @@
 
 			fixed4 frag(g2f i) : SV_Target
 			{
-				i.lightDir = normalize(i.lightDir);
-				fixed atten = LIGHT_ATTENUATION(i);
-
-				fixed4 col = tex2D(_MainTex, i.uv) * _Color + fixed4(i.vertexLighting, 1.0);
-				fixed diff = saturate(dot(i.normal, i.lightDir));
-
-				fixed4 c;
-				c.rgb = UNITY_LIGHTMODEL_AMBIENT.rgb * 2 * col.rgb;
-				c.rgb += (col.rgb * _LightColor0.rgb * diff) * (atten * 2);
-				c.a = col.a + _LightColor0.a * atten;
+				fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+				fixed4 c = ForwardBaseLightingInFrag(i, col);
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, c);
 				return c;
@@ -156,6 +168,25 @@
 				float4 vertex : SV_POSITION;
 			};
 
+			void ForwardAddLightingInGeom(inout g2f o)
+			{
+				o.lightDir = ObjSpaceLightDir(o.vertex);
+				TRANSFER_VERTEX_TO_FRAGMENT(o);
+			}
+
+			fixed4 ForwardAddLightingInFrag(g2f i, fixed4 color)
+			{
+				fixed4 col = color;
+				i.lightDir = normalize(i.lightDir);
+				fixed atten = LIGHT_ATTENUATION(i);
+				fixed diff = saturate(dot(i.normal, i.lightDir));
+
+				fixed4 c;
+				c.rgb = (col.rgb * _LightColor0.rgb * diff) * (atten * 2);
+				c.a = col.a;
+				return c;
+			}
+
 			struct vData
 			{
 				float3 pos;
@@ -170,8 +201,7 @@
 				o.vertex = UnityObjectToClipPos(o.vertex);
 				o.uv = data.uv;
 				o.normal = data.normal;
-				o.lightDir = ObjSpaceLightDir(o.vertex);
-				TRANSFER_VERTEX_TO_FRAGMENT(o);
+				ForwardAddLightingInGeom(o);
 				return o;
 			}
 
@@ -184,15 +214,8 @@
 
 			fixed4 frag(g2f i) : SV_Target
 			{
-				i.lightDir = normalize(i.lightDir);
-				fixed atten = LIGHT_ATTENUATION(i);
 				fixed4 col = tex2D(_MainTex, i.uv) * _Color;
-				fixed diff = saturate(dot(i.normal, i.lightDir));
-
-				fixed4 c;
-				c.rgb = (col.rgb * _LightColor0.rgb * diff) * (atten * 2);
-				c.a = col.a;
-
+				fixed4 c = ForwardAddLightingInFrag(i, col);
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, c);
 				return c;
@@ -233,8 +256,17 @@
 				UNITY_FOG_COORDS(1)
 				float4 vertex : SV_POSITION;
 				fixed4 color : COLOR;
+				float3 normal : TEXCOORD1;
 				SHADOW_COORDS(1)
 			};
+
+			void ShadowCasterLightingInGeom(inout g2f o)
+			{
+				half3 worldNormal = UnityObjectToWorldNormal(o.normal);
+				half nl = max(0, dot(worldNormal, _WorldSpaceLightPos0.xyz));
+				o.color = nl * _LightColor0 * _Color;
+				TRANSFER_SHADOW(o)
+			}
 
 			struct vData
 			{
@@ -249,10 +281,8 @@
 				o.vertex.xyz = data.pos;
 				o.vertex = UnityObjectToClipPos(o.vertex);
 				o.uv = data.uv;
-				half3 worldNormal = UnityObjectToWorldNormal(data.normal);
-				half nl = max(0, dot(worldNormal, _WorldSpaceLightPos0.xyz));
-				o.color = nl * _LightColor0 * _Color;
-				TRANSFER_SHADOW(o)
+				o.normal = data.normal;
+				ShadowCasterLightingInGeom(o);
 				return o;
 			}
 
