@@ -16,7 +16,6 @@ vData SetVData(float3 center, float3 posVec, float dist, float2 uv)
 void geom(triangle appdata input[3], uint pid : SV_PrimitiveID, inout TriangleStream<g2f> triStream)
 {
 	#define ADDV(v, n, e) v.normal = n; v.edge = e; triStream.Append(SetVertex(v))
-	#define ADDTRI(v1, v2, v3, n, e1, e2, e3) ADDV(v1, n, e1); ADDV(v2, n, e2); ADDV(v3, n, e3); triStream.RestartStrip()
 
 	uint seed = pid * 877;
 	if (Random(seed) > _Density) return;
@@ -44,14 +43,6 @@ void geom(triangle appdata input[3], uint pid : SV_PrimitiveID, inout TriangleSt
 	float3 leftBack = float3(-randX, randY, randZ);
 	float3 rightFront = float3(randX, randY, -randZ);
 	float3 rightBack = float3(randX, randY, randZ);
-	
-
-	/*
-	float3 leftFront = float3(-1, 1, -1);
-	float3 leftBack = float3(-1, 1, 1);
-	float3 rightFront = float3(1, 1, -1);
-	float3 rightBack = float3(1, 1, 1);
-	*/
 
 	vData v[4][2];
 
@@ -101,27 +92,6 @@ void geom(triangle appdata input[3], uint pid : SV_PrimitiveID, inout TriangleSt
 	ADDV(v[2][1], float3(0, -1, 0), float2(1, 0));
 	ADDV(v[1][1], float3(0, -1, 0), float2(0, 1));
 	ADDV(v[3][1], float3(0, -1, 0), float2(1, 1));
-	triStream.RestartStrip();
-	
-	/*
-	// 上
-	ADDTRI(v[0][0], v[1][0], v[3][0], float3(0, 1, 0), float2(0, 0), float2(0, 1), float2(1, 0));
-	ADDTRI(v[2][0], v[1][0], v[3][0], float3(0, 1, 0), float2(0, 0), float2(0, 1), float2(1, 0));
-	// 右
-	ADDTRI(v[2][0], v[3][0], v[3][1], float3(1, 0, 0), float2(0, 1), float2(1, 0), float2(1, 1));
-	ADDTRI(v[2][1], v[3][0], v[3][1], float3(1, 0, 0), float2(0, 1), float2(1, 0), float2(1, 1));
-	// 左
-	ADDTRI(v[0][0], v[1][0], v[0][1], float3(-1, 0, 0), float2(0, 0), float2(0, 1), float2(1, 0));
-	ADDTRI(v[1][0], v[0][1], v[1][1], float3(-1, 0, 0), float2(0, 0), float2(0, 1), float2(1, 0));
-	// 手前2
-	ADDTRI(v[0][0], v[3][0], v[0][1], float3(0, 0, 1), float2(0, 0), float2(0, 1), float2(1, 0));
-	ADDTRI(v[3][0], v[0][1], v[3][1], float3(0, 0, 1), float2(0, 0), float2(0, 1), float2(1, 0));
-	// 奥
-	ADDTRI(v[1][0], v[2][0], v[1][1], float3(0, 0, -1), float2(0, 0), float2(0, 1), float2(1, 0));
-	ADDTRI(v[2][0], v[1][1], v[2][1], float3(0, 0, -1), float2(0, 0), float2(0, 1), float2(1, 0));
-	// 下
-	ADDTRI(v[0][1], v[1][1], v[3][1], float3(0, -1, 0), float2(0, 0), float2(0, 1), float2(1, 0));
-	ADDTRI(v[2][1], v[1][1], v[3][1], float3(0, -1, 0), float2(0, 0), float2(0, 1), float2(1, 0));
-	*/
+	triStream.RestartStrip();	
 }
 #endif

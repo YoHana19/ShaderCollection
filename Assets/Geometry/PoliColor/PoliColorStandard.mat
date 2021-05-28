@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _Luminosity: 0.48
-    - _Saturation: 0.586
-    - _Speed: 0.72
+    - _Luminosity: 0.688
+    - _Saturation: 0.427
+    - _Speed: 0.58
     m_Colors: []

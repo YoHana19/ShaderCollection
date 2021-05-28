@@ -20,6 +20,24 @@ float Random2(float2 uv)
 	return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453123);
 }
 
+// Uniformaly distributed points on a unit sphere
+// http://mathworld.wolfram.com/SpherePointPicking.html
+float3 RandomUnitVector(uint seed)
+{
+	float PI2 = 6.28318530718;
+	float z = 1 - 2 * Random(seed);
+	float xy = sqrt(1.0 - z * z);
+	float sn, cs;
+	sincos(PI2 * Random(seed + 1), sn, cs);
+	return float3(sn * xy, cs * xy, z);
+}
+
+// Uniformaly distributed points inside a unit sphere
+float3 RandomVector(uint seed)
+{
+	return RandomUnitVector(seed) * sqrt(Random(seed + 2));
+}
+
 inline fixed4 RGBtoHSL(fixed4 rgb) {
 	fixed4 hsl = fixed4(0.0, 0.0, 0.0, rgb.w);
 	
